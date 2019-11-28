@@ -1,5 +1,5 @@
 ---
-title: "old_faithful"
+title: "Old Faithful Analysis"
 author: "Phil Dean"
 date: "28/11/2019"
 output: html_document
@@ -9,22 +9,48 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This is an example analysis for the 'Robust and Open Analysis in R' workshop. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+We shall be exploring the 'Old Faithful' dataset from Base R. 
 
-```{r cars}
-summary(cars)
+# Import and save data
+
+First we import the data from the datasets package. 
+```{r}
+df <- datasets::faithful
 ```
 
-## Including Plots
+We can now save this in the `data` folder as a `csv` for maximum interoptability. 
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+readr::write_csv(x=df, path='data/old_faithfull.csv')
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# Plot marginal distributions
+We can plot  marginal distirbution for each variable. 
+
+```{r}
+hist(df$eruptions)
+hist(df$waiting)
+```
+
+We can save them as normal as well: 
+```{r}
+png(filename='images/eruption_density.png')
+hist(df$eruptions)
+dev.off()
+png(filename='images/waiting_density.png')
+hist(df$waiting)
+dev.off()
+```
+
+Interesting!  Both distributions seem to be bimodal, let's look at the scatter of one against the other. 
+
+```{r}
+plot(df$waiting, df$eruptions)
+```
+
+Clearly we have that Old Faithful has two 'modes' - waiting for a short time with small eruprtions
+and waiting for a longer time with larger erutions. 
